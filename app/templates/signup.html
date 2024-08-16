@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://images.squarespace-cdn.com/content/v1/585ac0bb414fb5eed215d4e3/1694627570727-4Z839ITBKYQUD67EZ9MI/52438307865_d0b07f02c1_o+%282%29.jpg?format=1500w');
+            background-size: cover;
+            background-position: center;
+        }
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #0f0b13;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #0c090f;
+            border-radius: 25px;
+            outline: none;
+        }
+        button {
+            background-color: #0f0c13;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #110e16;
+        }
+        .login-text {
+            margin-top: 20px;
+            color: #060407;
+        }
+        .login-text a {
+            color: #0d0a0f;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .login-text a:hover {
+            color: #0a080f;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+        <form id="signupForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="first_name" placeholder="First Name" required>
+            <input type="text" id="last_name" placeholder="Last Name" required>
+            <button type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+        </form>
+        <div id="alertMessage" class="alert"></div>
+        <div class="login-text">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var email = document.getElementById("email").value;
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+
+            fetch("/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    email: email,
+                    first_name: first_name,
+                    last_name: last_name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var alertMessage = document.getElementById("alertMessage");
+                if (data.message === "User created successfully") {
+                    alertMessage.innerHTML = "<i class='fas fa-check-circle'></i> User created successfully!";
+                    alertMessage.style.display = "block";
+                    alertMessage.style.backgroundColor = "#77dd77";
+                    setTimeout(function() {
+                        window.location.href = "/login_page";
+                    }, 1000);
+                } else {
+                    alertMessage.innerHTML = "<i class='fas fa-exclamation-circle'></i> Username already exists";
+                    alertMessage.style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

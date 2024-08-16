@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://r2.easyimg.io/n65aqgy4r/ac4ec0cf-82d6-4139-aff0-36c3f98aa3f9.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        #container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: rgb(5, 3, 3);
+        }
+
+        .venue-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .venue-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .venue-details {
+            margin-bottom: 10px;
+        }
+
+        .book-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Recommendations</h1>
+        <div id="recommendedVenues"></div>
+    </div>
+
+    <script>
+        // Function to make AJAX request to backend and get recommendations
+        window.onload = function() {
+            getRecommendations();
+        };
+
+        // Function to make AJAX request to backend and get recommendations
+        function getRecommendations() {
+    // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+    // Specify the POST request to the /recommend endpoint
+        xhr.open("POST", "/recommend", true);
+
+    // Set the Content-Type header to indicate JSON data
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+    // Define a function to handle the response
+        xhr.onreadystatechange = function () {
+             if (xhr.readyState === 4 && xhr.status === 200) {
+            // Parse the JSON response and display recommendations
+              displayRecommendations(JSON.parse(xhr.responseText));
+            }
+        };
+
+    // Get the form data from the HTML form
+        var formData = new FormData(document.getElementById("recommendationForm"));
+        var userData = {};
+
+    // Convert form data to a JavaScript object
+        formData.forEach(function(value, key){
+            userData[key] = value;
+        });
+
+    // Send the form data as JSON in the request body
+        xhr.send(JSON.stringify(userData));
+        }
+
+
+        // Function to display recommendations on the webpage
+        function displayRecommendations(recommendations) {
+            var formData = new FormData(document.getElementById("recommendationForm"));
+
+            recommendations.forEach(function(venue) {
+                var venueItem = document.createElement("div");
+                venueItem.classList.add("venue-item");
+
+                var venueName = document.createElement("div");
+                venueName.classList.add("venue-name");
+                venueName.textContent = venue["Venue Name"];
+
+                var venueDetails = document.createElement("div");
+                venueDetails.classList.add("venue-details");
+                venueDetails.innerHTML = `
+                    <p>Location: ${venue["Location"]}</p>
+                    <p>Overview: ${venue["Overview"]}</p>
+                    <p>Rating: ${venue["Rating"]}</p>
+                    <p>Reviews: ${venue["Reviews"]}</p>
+                `;
+
+                var bookButton = document.createElement("button");
+                bookButton.classList.add("book-button");
+                bookButton.textContent = "Book Event";
+                bookButton.onclick = function() {
+                    bookEvent(); // Pass the venue ID to the bookEvent function
+                };
+
+                venueItem.appendChild(venueName);
+                venueItem.appendChild(venueDetails);
+                venueItem.appendChild(bookButton);
+
+                recommendedVenuesContainer.appendChild(venueItem);
+            });
+        }
+        function bookEvent(venueId) {
+            window.location.href = "booking.html";
+        }
+    </script>
+</body>
+</html>

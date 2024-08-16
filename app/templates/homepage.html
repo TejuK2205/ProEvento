@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg?cs=srgb&dl=pexels-codioful-%28formerly-gradienta%29-7130555.jpg&fm=jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            color:#000000
+        }
+        .options {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .option {
+            background-color: #020202;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 0 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .option:hover {
+            transform: translateY(-5px);
+        }
+        .option i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #d271e6;
+        }
+        .option span {
+            font-size: 18px;
+            color: #fffdfd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Event Planner - ProEvento</h1>
+        <div class="options">
+            <!-- Redirect to the Streamlit app running at http://localhost:8501/ -->
+            <div class="option" onclick="redirectTo('http://localhost:8501/')">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Create Event</span>
+            </div>
+            <div class="option" onclick="redirectTo('/calendar')">
+                <i class="fas fa-calendar-alt"></i>
+                <span>View Calendar</span>
+            </div>
+            <div class="option" onclick="redirectTo('/user_events')">
+                <i class="fas fa-eye"></i>
+                <span>View Events</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to redirect to the specified URL
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
+
+

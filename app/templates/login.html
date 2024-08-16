@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://images.squarespace-cdn.com/content/v1/585ac0bb414fb5eed215d4e3/1694627570727-4Z839ITBKYQUD67EZ9MI/52438307865_d0b07f02c1_o+%282%29.jpg?format=1500w');
+            background-size: cover;
+            background-position: center;
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #0d0b0f;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #040305;
+            border-radius: 25px;
+            outline: none;
+        }
+        button {
+            background-color: #010102;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #100b1a;
+        }
+        .alert {
+            background-color: #ffb6c1;
+            color: #fff;
+            padding: 10px 0;
+            margin-top: 20px;
+            border-radius: 25px;
+            display: none;
+        }
+        .alert i {
+            margin-right: 5px;
+        }
+        .signup-text {
+            margin-top: 20px;
+            color: #000000;
+        }
+        .signup-text a {
+            color: #030203;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .signup-text a:hover {
+            color: #0b0a0e;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+        <div id="alertMessage" class="alert"></div>
+        <div class="signup-text">
+            Don't have an account? <a href="/signup_page">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var alertMessage = document.getElementById("alertMessage");
+                if (data.message === "Login successful") {
+                    alertMessage.innerHTML = "<i class='fas fa-check-circle'></i> Login successful!";
+                    alertMessage.style.display = "block";
+                    alertMessage.style.backgroundColor = "#77dd77";
+
+                    localStorage.setItem("userId", data.user_id);
+                    
+                    setTimeout(function() {
+                        window.location.href = '/homepage';
+                    }, 1000);
+                } else {
+                    alertMessage.innerHTML = "<i class='fas fa-exclamation-circle'></i> Invalid username or password";
+                    alertMessage.style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css" rel="stylesheet">
+    <style>
+        /* Calendar container */
+        #calendar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Calendar header */
+        .fc-header-toolbar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Event title */
+        .fc-event-title {
+            font-weight: bold;
+        }
+
+        /* Event details */
+        .fc-list-item-title {
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .fc-list-item-meta {
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        /* Event container */
+        .fc-list-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        /* Event summary */
+        #event-summary {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="calendar-container">
+        <div id="calendar"></div>
+    </div>
+
+    <!-- Event summary -->
+    <div id="event-summary"></div>
+
+    <!-- FullCalendar JavaScript and Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var events = {{ events | tojson }};
+            
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: events.map(event => ({
+                    title: event.event_name,
+                    start: event.date,
+                    description: event.description // Adding event description
+                })),
+                eventClick: function(info) {
+                    // Display event summary on event click
+                    var eventSummary = document.getElementById('event-summary');
+                    eventSummary.innerHTML = '<h2>' + info.event.title + '</h2>' +
+                        '<p><strong>Date:</strong> ' + info.event.start.toDateString() + '</p>' +
+                        '<p><strong>Description:</strong> ' + info.event.extendedProps.description + '</p>';
+                    eventSummary.style.display = 'block';
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
