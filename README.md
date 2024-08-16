@@ -81,12 +81,10 @@ ai-event-planner/
 │   ├── styles.css
 │   ├── script.js
 ├── flask_bk.py                      # Main Flask application
-├── create_event_st1.ipynb               # Streamlit application code
-├── requirements.txt            # List of dependencies
+├── create_event_st1.ipynb
 ├── README.md                   # Project documentation
 └── data/                       # Data files for model and recommendations
-    ├── modified_user_data1.csv
-    ├── handled_venues.csv
+    ├── FEvenues.csv
 ```
 ### Usage
 Create an Event: After logging in, navigate to the 'Create Event' page where you can enter the details of your event.
